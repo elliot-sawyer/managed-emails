@@ -21,7 +21,7 @@
         "symbiote/silverstripe-gridfieldextensions": "^3"
     },
     "suggest": {
-        "silverstripe/cms": "Allows you to easily edit file permissions in the CMS"
+        "symbiote/silverstripe-queuedjobs": "Queue emails instead of sending immediately"
     },
     "extra": []
 }

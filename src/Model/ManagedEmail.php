@@ -9,14 +9,14 @@ use Symbiote\GridFieldExtensions\GridFieldTitleHeader;
 use Symbiote\GridFieldExtensions\GridFieldEditableColumns;
 use SilverStripe\Forms\GridField\GridFieldDeleteAction;
 use Symbiote\GridFieldExtensions\GridFieldAddNewInlineButton;
-use SilverStripe\Forms\ToggleCompositeField;
-use SilverStripe\Forms\TextField;
-use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Control\Email\Email;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\ArrayData;
-
+use Symbiote\QueuedJobs\Services\QueuedJobService;
+use Symbiote\QueuedJobs\Services\QueuedJob;
+use ElliotSawyer\EmailManagement\SendManagedEmailJob;
+use SilverStripe\Core\Injector\Injector;
 class ManagedEmail extends DataObject
 {
     private static $default_from_address = 'do-not-reply@example.com';
@@ -123,7 +123,15 @@ class ManagedEmail extends DataObject
 
         }
 
-        $email->send();
-
+        //if queued jobs is not available, send mail immediate
+        if (!interface_exists(QueuedJob::class)) {
+            $email->send();
+        } else {
+            //otherwise, queue up a job and defer mail;
+            $emailJob = Injector::inst()->create(SendManagedEmailJob::class);
+            $emailJob->Email = $email;
+            singleton(QueuedJobService::class)
+                ->queueJob($emailJob, date('Y-m-d H:i:s', time()));
+        }
     }
 }
