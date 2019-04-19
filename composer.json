@@ -1,0 +1,27 @@
+{
+    "name": "elliotsawyer/email-management",
+    "type": "silverstripe-vendormodule",
+    "description": "Centrally manage emails used through a SilverStripe site",
+    "homepage": "http://silverstripe.org",
+    "license": "BSD-4",
+    "keywords": [
+        "silverstripe",
+        "new zealand",
+        "nz",
+        "email"
+    ],
+    "authors": [
+        {
+            "name": "elliot sawyer",
+            "email": "elliot@cryptopay.nz"
+        }
+    ],
+    "require": {
+        "silverstripe/framework": "^4",
+        "symbiote/silverstripe-gridfieldextensions": "^3"
+    },
+    "suggest": {
+        "silverstripe/cms": "Allows you to easily edit file permissions in the CMS"
+    },
+    "extra": []
+}
