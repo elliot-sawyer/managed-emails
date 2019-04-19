@@ -14,6 +14,8 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\EmailField;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\Control\Email\Email;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\ArrayData;
 
 class ManagedEmail extends DataObject
 {
@@ -55,6 +57,12 @@ class ManagedEmail extends DataObject
         $fields->dataFieldByName('FromAddress')
             ->setDescription('If left blank, this will default to ' . $this->config()->default_from_address);
 
+        $fields->dataFieldByName('Body')
+            ->setDescription('Your emails can have data passed into them as an'
+            . ' array or a DataObject. You can utilise these variables in your '
+            .' templates like this: '
+            .' {$Member.FirstName} sent ${$AmountNZD} to {$BankAccount}.');
+
         $fields->addFieldsToTab('Root.OtherAddresses', [
             $messageField, $othersField
         ]);
@@ -88,5 +96,34 @@ class ManagedEmail extends DataObject
         if (!$this->FromAddress) {
             $this->FromAddress = $this->config()->default_from_address;
         }
+    }
+
+    public function send($toAddress, $data = [])
+    {
+        $email = Email::create();
+        $email->addTo($toAddress);
+        $email->addFrom($this->FromAddress);
+        $email->setSender($this->FromAddress);
+        $email->setReturnPath($this->FromAddress);
+        $email->Subject = $this->Subject;
+        $email->Body = SSViewer::execute_string($this->Body, ArrayData::create($data));
+
+        foreach($this->OtherAddresses() as $otherEmailAddress) {
+            if ($otherEmailAddress->TypeField == 'To') {
+                $email->addTo($otherEmailAddress->Address, $otherEmailAddress->Name);
+            }
+
+            if ($otherEmailAddress->TypeField == 'CC') {
+                $email->addCC($otherEmailAddress->Address, $otherEmailAddress->Name);
+            }
+
+            if ($otherEmailAddress->TypeField == 'BCC') {
+                $email->addBCC($otherEmailAddress->Address, $otherEmailAddress->Name);
+            }
+
+        }
+
+        $email->send();
+
     }
 }
