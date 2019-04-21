@@ -8,7 +8,7 @@ class ManagedEmailAddress extends DataObject {
     private static $db = [
         'Address' => 'Varchar(255)',
         'Name' => 'Varchar(255)',
-        'TypeField' => "Enum('To,CC,BCC','BCC')"
+        'TypeField' => "Enum('To,CC,BCC,Reply-To','BCC')"
     ];
 
     private static $has_one = [
@@ -28,14 +28,5 @@ class ManagedEmailAddress extends DataObject {
 
         }
         return $valid;
-    }
-
-    public function getFullEmailAddress()
-    {
-        if ($this->Name) {
-            return sprintf("%s<%s>", $this->Name, $this->Address);
-        }
-
-        return $this->Address;
     }
 }

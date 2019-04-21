@@ -23,6 +23,7 @@ class ManagedEmail extends DataObject
     private static $minimum_body_length = 7;
 
     private static $db = [
+        'Label' => 'Varchar(255)',
         'FromAddress' => 'Varchar(255)',
         'Subject' => 'Varchar(255)',
         'Body' => 'HTMLText'
@@ -31,7 +32,14 @@ class ManagedEmail extends DataObject
         'OtherAddresses' => ManagedEmailAddress::class,
     ];
 
-    private static $summary_fields = ['Subject'];
+    private static $summary_fields = ['Label', 'Subject'];
+
+    private static $indexes = [
+        'LabelIndex' => [
+            'type' => 'unique',
+            'columns' => ['Label']
+        ]
+    ];
 
     public function getCMSFields()
     {
@@ -47,15 +55,24 @@ class ManagedEmail extends DataObject
 
         $messageField = LiteralField::create(
             'RecipientsMessage',
-            sprintf(
-                "<div class=\"alert alert-info\">%s</div>",
-                'These recipients will receive email in addition to any user-supplied ones.'
-            )
+                "<div class=\"alert alert-info\">"
+                . 'These recipients will receive email in addition to any'
+                .' user-supplied ones. Only one Reply-To address will be added'
+                .' the sent email. If no Reply-To is provided, the From address'
+                .' is used instead.'
+                .' </div>'
         );
         $othersField = GridField::create('OtherAddresses','Other addresses',$this->OtherAddresses(),$addressConfig);
 
+        $fields->dataFieldByName('Label')
+            ->setDescription('This is the label used to identify the email throughout your codebase');
+
+        $configuredFromAddress = Email::config()->send_all_emails_from;
+        if (!$configuredFromAddress) {
+            $configuredFromAddress = $this->config()->default_from_address;
+        }
         $fields->dataFieldByName('FromAddress')
-            ->setDescription('If left blank, this will default to ' . $this->config()->default_from_address);
+            ->setDescription('If left blank, this will default to ' . $configuredFromAddress);
 
         $fields->dataFieldByName('Body')
             ->setDescription('Your emails can have data passed into them as an'
@@ -86,6 +103,10 @@ class ManagedEmail extends DataObject
             $valid->addError('\'FromAddress\' is not a valid email address');
         }
 
+        if (!$this->Label) {
+            $valid->addError('\'Label\' is a required field');
+        }
+
         return $valid;
     }
 
@@ -103,7 +124,6 @@ class ManagedEmail extends DataObject
         $email = Email::create();
         $email->addTo($toAddress);
         $email->addFrom($this->FromAddress);
-        $email->setSender($this->FromAddress);
         $email->setReturnPath($this->FromAddress);
         $email->Subject = $this->Subject;
         $email->Body = SSViewer::execute_string($this->Body, ArrayData::create($data));
@@ -121,6 +141,13 @@ class ManagedEmail extends DataObject
                 $email->addBCC($otherEmailAddress->Address, $otherEmailAddress->Name);
             }
 
+            if ($otherEmailAddress->TypeField == 'Reply-To') {
+                $email->setSender($otherEmailAddress->Address, $otherEmailAddress->Name);
+            }
+        }
+
+        if (!$email->getSender()) {
+            $email->setSender($this->FromAddress);
         }
 
         //if queued jobs is not available, send mail immediate
