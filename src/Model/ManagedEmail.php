@@ -17,6 +17,8 @@ use Symbiote\QueuedJobs\Services\QueuedJobService;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use ElliotSawyer\EmailManagement\SendManagedEmailJob;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\View\Parsers\ShortcodeParser;
+
 class ManagedEmail extends DataObject
 {
     private static $default_from_address = 'do-not-reply@example.com';
@@ -126,7 +128,10 @@ class ManagedEmail extends DataObject
         $email->addFrom($this->FromAddress);
         $email->setReturnPath($this->FromAddress);
         $email->Subject = $this->Subject;
-        $email->Body = SSViewer::execute_string($this->Body, ArrayData::create($data));
+        $email->Body = SSViewer::execute_string(
+            ShortcodeParser::get_active()->parse($this->Body),
+            ArrayData::create($data)
+        );
 
         foreach($this->OtherAddresses() as $otherEmailAddress) {
             if ($otherEmailAddress->TypeField == 'To') {
