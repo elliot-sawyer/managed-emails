@@ -21,6 +21,7 @@ use SilverStripe\View\Parsers\ShortcodeParser;
 
 class ManagedEmail extends DataObject
 {
+    private static $table_name = 'ManagedEmail';
     private static $default_from_address = 'do-not-reply@example.com';
     private static $minimum_body_length = 7;
 

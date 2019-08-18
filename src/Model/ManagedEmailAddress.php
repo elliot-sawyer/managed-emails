@@ -5,6 +5,7 @@ use SilverStripe\Control\Email\Email;
 use SilverStripe\ORM\DataObject;
 
 class ManagedEmailAddress extends DataObject {
+    private static $table_name = 'ManagedEmailAddress';
     private static $db = [
         'Address' => 'Varchar(255)',
         'Name' => 'Varchar(255)',

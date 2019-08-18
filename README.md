@@ -28,7 +28,7 @@ ElliotSawyer\ManagedEmails\ManagedEmail:
 ## Usage
 Define a new Managed Email in the "Email management" admin area:
 1. Set a label: this is the identifier you'll "look up" within your code
-2. Configure any other recipients: CC, BCC, and Reply-To addresses
+2. Configure any other recipients: To, CC, BCC, and Reply-To addresses
 3. Set a From address, Subject, and Message body
 4. You can make references to specific variables in your message body, and pass them into into the message body from your code.
 5. If you have Queued Jobs installed, your message will be queued for sending. If not, it will send immediately
