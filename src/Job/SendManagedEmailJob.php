@@ -1,5 +1,5 @@
 <?php
-namespace ElliotSawyer\EmailManagement;
+namespace ElliotSawyer\ManagedEmails;
 use SilverStripe\Core\ClassInfo;
 use Symbiote\QueuedJobs\Services\QueuedJob;
 use Symbiote\QueuedJobs\Services\QueuedJobService;

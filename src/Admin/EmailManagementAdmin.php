@@ -1,5 +1,5 @@
 <?php
-namespace ElliotSawyer\EmailManagement;
+namespace ElliotSawyer\ManagedEmails;
 use SilverStripe\Admin\ModelAdmin;
 
 class EmailManagementAdmin extends ModelAdmin

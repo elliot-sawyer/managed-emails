@@ -1,5 +1,5 @@
 {
-    "name": "elliotsawyer/email-management",
+    "name": "elliotsawyer/managed-emails",
     "type": "silverstripe-vendormodule",
     "description": "Centrally manage emails used through a SilverStripe site",
     "homepage": "http://silverstripe.org",

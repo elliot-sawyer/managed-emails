@@ -1,5 +1,5 @@
 <?php
-namespace ElliotSawyer\EmailManagement;
+namespace ElliotSawyer\ManagedEmails;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;

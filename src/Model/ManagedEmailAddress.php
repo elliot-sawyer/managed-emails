@@ -1,5 +1,5 @@
 <?php
-namespace ElliotSawyer\EmailManagement;
+namespace ElliotSawyer\ManagedEmails;
 
 use SilverStripe\Control\Email\Email;
 use SilverStripe\ORM\DataObject;
