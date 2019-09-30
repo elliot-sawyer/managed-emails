@@ -15,7 +15,7 @@ use SilverStripe\View\SSViewer;
 use SilverStripe\View\ArrayData;
 use Symbiote\QueuedJobs\Services\QueuedJobService;
 use Symbiote\QueuedJobs\Services\QueuedJob;
-use ElliotSawyer\EmailManagement\SendManagedEmailJob;
+use ElliotSawyer\ManagedEmails\SendManagedEmailJob;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\Parsers\ShortcodeParser;
 

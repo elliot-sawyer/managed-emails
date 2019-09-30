@@ -1,5 +1,5 @@
 # Managed Emails
-Do you have a crapload of emails to send out to your users? Centrally manage them in the CMS, and refer to them in your codebase using a lookup label field. Content-manage your subject, message body, from address, and CC/BCC/ReplyTo addresses, with support for variables provided by a DataObject. Supports direct sending, or queuedjobs sending if it's available. 
+Do you have a bunch of emails to send out to your users whenever they do some specific thing that needs their attention? Centrally manage them in the CMS, and refer to them in your codebase using a lookup label field. Content-manage your subject, message body, from address, and CC/BCC/ReplyTo addresses, with support for variables provided by a DataObject. Supports direct sending, or queuedjobs sending if it's available. 
 
 This is a ModelAdmin for centrally managing emails within the CMS:
 
