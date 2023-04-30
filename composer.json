@@ -18,7 +18,7 @@
     ],
     "require": {
         "silverstripe/framework": "^4 || ^5",
-        "symbiote/silverstripe-gridfieldextensions": "^3"
+        "symbiote/silverstripe-gridfieldextensions": "^3 || ^4"
     },
     "suggest": {
         "symbiote/silverstripe-queuedjobs": "Queue emails instead of sending immediately"
